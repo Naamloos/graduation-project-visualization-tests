@@ -1,2 +1,5 @@
-# graduation-project-visualization-tests
-Small test project for my graduation thesis trying out different visualization methods in React using a dataset that represents heart rates over time
+# Graduation Project Visualization Tests
+Testing some different kinds of charts/graphs to figure out which works best for visualizing sensor data over time.
+
+## Dataset used
+[Heart rate time series / MIT-BIH Database](https://www.kaggle.com/datasets/ahmadsaeed1007/heart-rate-time-series-mitbih-database?resource=download)
