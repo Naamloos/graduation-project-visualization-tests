@@ -3,6 +3,8 @@ import { useLoaderData } from "react-router";
 import { promises as fs } from "fs";
 import { HeartRateDataArray, HeartRateDataPoint } from "~/types/HeartRate";
 import HeartRateLineChart from "~/components/HeartRateLineChart";
+import { useState } from "react";
+import HeartRateBarChart from "~/components/HeartRateBarChart";
 
 export const meta: MetaFunction = () => {
   return [
@@ -52,15 +54,51 @@ export async function loader()
   return output;
 }
 
+interface ChartSwitchProps
+{
+  option : ChartType;
+  data : HeartRateDataArray;
+}
+
+enum ChartType
+{
+  Line = "line",
+  Bar = "bar"
+}
+
+function ChartSwitch(props : ChartSwitchProps)
+{
+  switch (props.option)
+  {
+    case ChartType.Line:
+      return <HeartRateLineChart inputData={props.data}/>
+    case ChartType.Bar:
+      return <HeartRateBarChart inputData={props.data}/>
+    default:
+      return <p>Invalid ChartType given: {props.option}</p>
+  }
+}
+
 export default function Index() 
 {
   const loadedData : HeartRateDataArray = useLoaderData() as HeartRateDataArray;
 
-  return <>
+  const [selectedOption, setSelectedOption] = useState<ChartType>(ChartType.Line);
+
+  return (
+    <>
       <div style={{ fontFamily: "Comic Sans MS", lineHeight: "1.8" }}>
         <h1> Data Vis Tests </h1>
-        <HeartRateLineChart inputData={loadedData}/>
-        <p>battle royale</p>
+
+        Select a type of chart to display: &nbsp;
+        <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value as ChartType)}>
+          <option value={ChartType.Line}>Line Chart</option>
+          <option value={ChartType.Bar}>Bar Chart</option>
+        </select>
+
+        <ChartSwitch option={selectedOption} data={loadedData}/>
+
       </div>
     </>
+  );
 }
